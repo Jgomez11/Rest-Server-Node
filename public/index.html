@@ -1,11 +1,185 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>REST API</title>
+    <title>Google Signin</title>
+
+    <meta
+      name="google-signin-client_id"
+      content="1023916028923-mnn067lcjn3itrr0lo8oj1s07kddgrcj.apps.googleusercontent.com"
+    />
   </head>
   <body>
-    <h1>REST API <b style="color: royalblue"> CORRIENDO</b></h1>
+    <h1>Iniciar Sesi</h1>
+    <hr />
+
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <a href="#" onclick="signOut();">Sign out</a>
+
+    <script>
+      console.log(window.location.hostname.includes("localhost"));
+
+      var url = window.location.hostname.includes("localhost")
+        ? "http://localhost:8080/api/auth/google"
+        : "https://restserver-curso-fher.herokuapp.com/api/auth/google";
+
+      function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
+        console.log("Name: " + profile.getName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+        var id_token = googleUser.getAuthResponse().id_token;
+        const data = { id_token };
+
+        fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        })
+          .then((resp) => resp.json())
+          .then((data) => console.log("Nuestro server", data))
+          .catch(console.log);
+      }
+
+      function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+          console.log("User signed out.");
+        });
+      }
+    </script>
+  </body>
+</html> -->
+
+<!-- Bootstrap CDN -->
+<link
+  href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+  rel="stylesheet"
+  id="bootstrap-css"
+/>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Google Sign-in</title>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- google sign-in -->
+    <meta
+      name="google-signin-client_id"
+      content="698458383343-5769c30gq9qt7ubdbd32nonlnr2aoabq.apps.googleusercontent.com"
+    />
+
+    <!--Fontawesome CDN-->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+      integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+      crossorigin="anonymous"
+    />
+
+    <!--Custom styles-->
+    <link rel="stylesheet" type="text/css" href="css/styles.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="d-flex justify-content-center h-100">
+        <div class="card">
+          <div class="card-header">
+            <h3>Iniciar Sesión</h3>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="input-group form-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"
+                    ><i class="fas fa-user"></i
+                  ></span>
+                </div>
+                <input type="text" class="form-control" placeholder="usuario" />
+              </div>
+              <div class="input-group form-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"
+                    ><i class="fas fa-key"></i
+                  ></span>
+                </div>
+                <input
+                  type="password"
+                  class="form-control"
+                  placeholder="contraseña"
+                />
+                <br />
+              </div>
+              <div class="g-signin2" data-onsuccess="onSignIn"></div>
+              <a href="#" onclick="signOut();">Cerrar Sesión</a>
+              <!-- <div class="row align-items-center remember">
+                <input type="checkbox" />Remember Me
+              </div> -->
+              <div class="form-group">
+                <input
+                  type="submit"
+                  value="Entrar"
+                  class="btn float-right login_btn"
+                />
+              </div>
+            </form>
+          </div>
+          <!-- <div class="card-footer">
+            <div class="d-flex justify-content-center links">
+              No tienes una cuenta?<a href="#">Registrarse</a>
+            </div>
+            <div class="d-flex justify-content-center">
+              <a href="#">Recuperar contraseña?</a>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var url = window.location.hostname.includes("localhost")
+        ? "http://localhost:8080/api/auth/google"
+        : "https://rest-server-node001.herokuapp.com/api/auth/google";
+
+      function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+        // console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
+        // console.log("Name: " + profile.getName());
+        // console.log("Image URL: " + profile.getImageUrl());
+        // console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+        var id_token = googleUser.getAuthResponse().id_token;
+        const data = { id_token };
+
+        fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        })
+          .then((resp) => resp.json())
+          .then((data) => console.log("server", data))
+          .catch(console.log);
+      }
+
+      function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+          console.log("User signed out.");
+        });
+      }
+    </script>
   </body>
 </html>

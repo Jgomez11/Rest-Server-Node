@@ -7,6 +7,7 @@ const {
   esAdminRol,
   tieneRol,
 } = require("../middlewares");
+
 const {
   esRoleValido,
   emailExiste,
@@ -19,12 +20,14 @@ const {
   usuariosPost,
   usuariosDelete,
   usuariosPatch,
-} = require("../controllers/usuarios");
+} = require("../controllers");
 
 const router = Router();
 
+//obtener usuarios
 router.get("/", usuariosGet);
 
+//actualizar usuario
 router.put(
   "/:id",
   [
@@ -36,8 +39,9 @@ router.put(
   usuariosPut
 );
 
+//registrar usuario
 router.post(
-  "/",
+  "/registrar",
   [
     check("nombre", "el nombre es obligatorio").not().isEmpty(),
     check(
@@ -52,6 +56,7 @@ router.post(
   usuariosPost
 );
 
+//eliminar usuario
 router.delete(
   "/:id",
   [
